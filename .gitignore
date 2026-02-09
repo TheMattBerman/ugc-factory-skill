@@ -1,0 +1,20 @@
+# Environment and secrets — never commit
+.env
+.env.local
+.env.*.local
+*.pem
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Optional local outputs (if you generate into repo)
+# outputs/
+# generated/
