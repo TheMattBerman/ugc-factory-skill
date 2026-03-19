@@ -1,137 +1,210 @@
 ---
 name: ugc-content-factory
-description: "Director-First UGC content generation using Kling 3.0 (via fal.ai). Generates authentic AI characters, visuals, scripts, and videos through a 4-module pipeline with user approval gates. Triggers on: ugc, ugc video, ugc creator, testimonial video, user generated content."
+description: "Director-First UGC video generation using Kling 3.0 (via fal.ai). Generates authentic AI characters, visuals, scripts, and videos through a 4-module pipeline with user approval gates. Triggers on: ugc, ugc video, ugc creator, testimonial video, user generated content, ai ugc, kling ugc, fal ugc, create ugc ad, ugc content factory."
 ---
 
 # UGC Content Factory
 
-Generate authentic-feeling UGC content at scale with consistent AI characters.
+Generate authentic-feeling UGC video content at scale with consistent AI characters, using Kling 3.0 via fal.ai.
 
-**Use this skill when:** You need UGC-style video content (testimonials, reviews, unboxings, demos) without hiring real creators.
+**Core unlock:** Kling 3.0's Elements system locks character identity across videos. Combined with multi-shot storyboards and native lip-sync, you generate an entire UGC library with consistent "creators" — no real humans needed.
 
-**The unlock:** Kling 3.0's Elements system (via fal.ai) locks character identity across multiple videos. Combined with multi-shot storyboards and native lip-sync, you can generate an entire UGC library with consistent "creators."
+**Director-First principle:** Visuals before script. Design how each shot looks and moves FIRST, then write dialogue that fits. The script serves the visuals, not the other way around. This prevents the "sitting and talking" problem and forces visual variety.
 
 ---
 
-## Director-First Pipeline
+## Contract
 
-**Key principle:** Visuals before script. Design how each shot looks and moves FIRST, then write dialogue that fits. The script serves the visuals, not the other way around.
+### Input
+- **Required:** product/brand name + what it does + target audience
+- **Optional:** existing character Element URLs, product image URLs, seed frames, brand voice file, competitor UGC examples
+- **Format:** text description, URLs, or brand context file
+
+### Output
+- **Produces:** Generated UGC video(s) via fal.ai Kling 3.0, plus creative brief, visual beat sheet, and synchronized script
+- **Format:** Video file (MP4), supporting docs inline
+- **Downstream:** Paid creative pipeline, social posting, client deliverables
+
+### Validation
+- **Pre-conditions:** fal.ai API access, product/audience known
+- **Post-conditions:** Video passes quality gate, all 4 stealth checks pass
+- **Failure checks:** If character/audience mismatch is unresolvable, flag before generating
+
+---
+
+## Pipeline
 
 ```
-MODULE A: Creative Director    → Creative Brief        → GATE 1 (user approves)
-                                                          │
-MODULE B: Cinematographer      → Visual Beat Sheet      → GATE 2 (user approves)
-                                                          │
-MODULE C: Screenwriter         → Synchronized Script    → GATE 3 (user approves)
-                                                          │
+MODULE A: Creative Director    → Creative Brief        → GATE 1
+MODULE B: Cinematographer      → Visual Beat Sheet      → GATE 2
+MODULE C: Screenwriter         → Synchronized Script    → GATE 3
 MODULE D: Engineer             → fal.ai JSON + Execute  → Output
 ```
 
-**Variable durations:** Each shot can be 3s, 4s, or 5s. Hooks are punchy (3s), demos breathe (5s). Total must sum to target duration.
+Each gate requires user approval before proceeding. Do not skip gates.
 
 ---
 
-## Before You Start: Existing Assets Check
+## Before entering the pipeline
 
-Before entering the pipeline, **ASK the user:**
+**Ask the user:**
+1. "Do you have an existing character to reuse?" (Element image URL)
+2. "Do you have product images to use as Elements?" (image URL)
+3. "Do you have a seed frame / first-frame image?" (image URL)
 
-1. "Do you have an **existing character** to reuse? (Provide Element image URL)"
-2. "Do you have **product images** to use as Elements? (Provide image URL)"
-3. "Do you have a **seed frame** / first-frame image? (Provide image URL)"
+If no → new images generated with Nano Banana Pro via `/ai-image-generation`.
 
-If yes → use those URLs in the pipeline. If no → new images will be generated with **Nano Banana Pro** via `/ai-image-generation`.
-
-Check `references/CHARACTER_LIBRARY.md` for any previously saved characters/products.
-
----
-
-## How to Execute
-
-### Phase A: Creative Director
-
-**Read** `references/MODULE_A_CREATIVE_DIRECTOR.md` before proceeding.
-
-Also load for reference:
-- `references/CHARACTER_LIBRARY.md` (character archetypes + saved characters)
-- `references/SCENE_SETTINGS.md` (setting options)
-
-**Tasks:**
-1. Select content format (Testimonial, Unboxing, Problem/Solution, Comparison, Demo)
-2. Choose hook angle (Gatekeep, Skeptic, Fail, Visual Shock)
-3. Select character archetype and setting (or reuse saved character)
-4. Run Stealth Validation (4 mandatory checks)
-5. Present **Creative Brief** to user
-
-**⛔ GATE 1:** Present Creative Brief. STOP. Wait for user approval before proceeding.
+Check `references/CHARACTER_LIBRARY.md` for saved characters/products.
 
 ---
 
-### Phase B: Cinematographer
+## Module A: Creative Director
 
-**Read** `references/MODULE_B_CINEMATOGRAPHER.md` before proceeding.
+**Read** `references/MODULE_A_CREATIVE_DIRECTOR.md` for full format/hook/validation details.
+Also load: `references/CHARACTER_LIBRARY.md`, `references/SCENE_SETTINGS.md`.
 
-**Tasks:**
-1. Design shot-by-shot visual sequence (NO dialogue)
-2. Assign variable durations (3s/4s/5s per shot)
-3. Apply Kling prompt engineering (6 elements, 4 rules)
-4. Verify scene variety (2-of-4 position/angle changes)
-5. Generate seed images if using I2V workflow (**Nano Banana Pro** via `/ai-image-generation` — use Photorealistic Pre-Prompt)
-6. Present **Visual Beat Sheet** to user
+**Core decisions:**
+1. Pick ONE content format (Testimonial, Unboxing, Problem/Solution, Comparison, Demo)
+2. Pick ONE hook angle (Gatekeep, Skeptic, Fail, Visual Shock)
+3. Select character archetype + setting
+4. Run Stealth Validation (all 4 checks must pass)
 
-**⛔ GATE 2:** Present Visual Beat Sheet. STOP. Wait for user approval before proceeding.
+**Stealth Validation (mandatory — content must pass ALL 4):**
+- **CAMOUFLAGE:** Would a scroller identify this as an ad in the first 0.5s? If yes → de-polish.
+- **VIBE:** Does the viewer leave within 3s? If yes → lead with value before product.
+- **INTEGRATION:** When the product appears, does the viewer swipe away? If yes → make product appearance inevitable, not forced.
+- **IMPERFECTION:** Does this feel like a marketing team's output? If yes → add messiness, filler words, casual language.
+
+**⛔ GATE 1 output — present to user:**
+
+| Field | Content |
+|-------|---------|
+| Product | [name] |
+| Target Audience | [who] |
+| Content Format | [which one] |
+| Hook Angle | [which one] |
+| Audio Hook | [exact opening line] |
+| Visual Hook | [what's on screen] |
+| Character | [archetype + specifics] |
+| Setting | [environment + details] |
+| Target Duration | [seconds] |
+| Stealth: Camouflage | PASS/FAIL + note |
+| Stealth: Vibe | PASS/FAIL + note |
+| Stealth: Integration | PASS/FAIL + note |
+| Stealth: Imperfection | PASS/FAIL + note |
+
+STOP. Wait for approval.
 
 ---
 
-### Phase C: Screenwriter
+## Module B: Cinematographer
 
-**Read** `references/MODULE_C_SCREENWRITER.md` before proceeding.
+**Read** `references/MODULE_B_CINEMATOGRAPHER.md` for Kling prompt engineering, shot design, and image generation details.
 
-**Tasks:**
-1. Calculate word budget per shot (~2.5 words/sec)
-2. Write dialogue fitted to shot durations
-3. Apply 4 Audio Rules (sync, cadence, room sound, bridge)
-4. Map script to Beat Sheet (script-to-beat-sheet template)
-5. Run script quality check
-6. Present **Synchronized Script** to user
+**Core decisions:**
+1. Design shot-by-shot visual sequence (NO dialogue yet)
+2. Assign variable durations: 3s (punchy hooks), 4s (setup), 5s (demos that breathe)
+3. Apply the 6 prompt elements: Camera, Subject, Environment, Lighting, Texture, Emotion
+4. Verify scene variety: at least 2 of 4 shots must change position or angle
+5. Generate seed images if using I2V workflow (Nano Banana Pro only)
 
-**⛔ GATE 3:** Present Synchronized Script. STOP. Wait for user approval before proceeding.
+**4 rules of Kling prompting (always apply):**
+1. Lead with cinematic camera verbs (dolly push, whip-pan, shoulder-cam drift)
+2. Include texture details (grain, reflections, condensation, fabric sheen)
+3. Describe temporal flow (beginning → middle → end of each shot)
+4. Name real light sources (not "dramatic lighting" — say neon signs, golden hour, fluorescent tubes)
+
+**⛔ GATE 2 output — present to user:**
+
+For each shot:
+| Field | Content |
+|-------|---------|
+| Shot # | Sequential |
+| Duration | 3s / 4s / 5s |
+| Camera | Shot type + movement |
+| Subject | Who + physical action |
+| Environment | Setting details |
+| Lighting | Light source + feel |
+| Texture | Physical details that sell realism |
+| Expression | Facial/emotional state |
+| Action Flow | Beginning → middle → end |
+
+Plus scene variety check (passes 2-of-4 rule?) and Kling prompt checklist.
+
+STOP. Wait for approval.
 
 ---
 
-### Phase D: Engineer
+## Module C: Screenwriter
 
-**Read** `references/MODULE_D_ENGINEER.md` before proceeding.
+**Read** `references/MODULE_C_SCREENWRITER.md` for audio rules, script templates, and sync mapping.
 
-**Tasks:**
-1. Assemble Visual Beat Sheet + Script into `multi_prompt` JSON
+**The Visual Beat Sheet is LOCKED.** Write dialogue that fits existing shot durations. Do not change durations or camera directions.
+
+**Core rules:**
+- **Word budget:** ~2.5 words/sec (3s = 7-8 words, 4s = 9-10 words, 5s = 12-13 words)
+- **Authentic cadence:** Include filler words ("honestly," "like," "okay so"), self-corrections, natural pauses
+- **No ad-speak:** Ban "revolutionary," "game-changing," "best-in-class." Nobody talks like that.
+- **The bridge:** Product mention must feel inevitable, not forced. It's a detail in a story, not a pivot point.
+- **Product name:** Once, maybe twice. Not more.
+
+**Dialogue litmus test:** Read it aloud. If it sounds like copy, rewrite it.
+
+**⛔ GATE 3 output — present to user:**
+
+For each shot:
+| Field | Content |
+|-------|---------|
+| Shot # | From beat sheet |
+| Duration | From beat sheet (DO NOT CHANGE) |
+| Word Budget | Duration × 2.5 |
+| Script | Exact dialogue |
+| Word Count | Actual / budget |
+| Delivery Notes | Tone direction |
+
+Plus: full continuous script, total word count, sync check (PASS/FAIL).
+
+STOP. Wait for approval.
+
+---
+
+## Module D: Engineer
+
+**Read** `references/MODULE_D_ENGINEER.md` for API reference, JSON assembly, chunking strategy, and gotchas.
+
+**Core execution:**
+1. Merge Visual Beat Sheet + Script into `multi_prompt` JSON
 2. Run compilation checklist
 3. Submit to fal.ai (standard for test, pro for final)
-4. Use queue endpoint for anything over 5 seconds
+4. Use queue endpoint for anything over 5s
 5. Present output with quality check
 
----
-
-## Character Setup (One-Time)
-
-Before first video with a new character:
-
-1. Define persona brief (see CHARACTER_LIBRARY.md)
-2. Generate 3-5 reference images via **Nano Banana Pro** (`/ai-image-generation`) — use Photorealistic Pre-Prompt from MODULE_B
-3. Select best reference image(s)
-4. Upload to fal.ai Kling 3.0 Elements
-5. Save character to CHARACTER_LIBRARY.md "Saved Characters" section for reuse
+**Critical API constraints:**
+- `voice_ids` and `elements` are mutually exclusive — drives chunking strategy for >15s videos
+- Minimum shot duration is 3 seconds
+- Don't include both `prompt` and `multi_prompt`
+- Use `voice_url` (not `audio_url`) for create-voice endpoint
 
 ---
 
-## Integration with Other Skills
+## Quality Gate (before delivering final output)
 
-| Skill | Use For |
-|-------|---------|
-| `/ai-image-generation` | Character reference images via Nano Banana |
-| `/ai-talking-head` | Fallback for single-shot videos |
-| `/hooks` | Generate hook variations for A/B testing |
-| `/direct-response-copy` | Script optimization for conversion |
-| `/brand-voice` | Ensure scripts match client voice |
+Every output must pass ALL of these:
+
+- [ ] Character feels native to the target audience (not a model, not a stock photo)
+- [ ] Script sounds like a real person, not a marketer (read it aloud)
+- [ ] First 2 seconds create genuine stop power
+- [ ] Setting feels plausible and incidental, not staged
+- [ ] Visual sequence varies enough (no 4 shots of sitting-and-talking)
+- [ ] Dialogue fits shot durations (sync check passes)
+- [ ] Product enters after the hook, not during it
+- [ ] No ad-speak in dialogue
+- [ ] One core message, not three
+- [ ] Works with sound off (text overlays carry the story if used)
+- [ ] All 4 stealth checks still pass on final output
+- [ ] A real person scrolling would not immediately identify this as an ad
+
+If any check fails, fix before delivering. Do not note the issue and move on.
 
 ---
 
@@ -147,31 +220,25 @@ Get these right and the rest is optimization.
 
 ---
 
-## Quick Tips
+## Integration with other skills
 
-**Do:**
-- Lead with imperfection — slightly off framing, natural pauses, filler words
-- Use specific details — "3 weeks" not "a while"
-- Match character to audience demographic
-- Keep it short — 15-30 seconds, not 60+
-
-**Don't:**
-- Over-polish — if it looks like an ad, it fails
-- Use marketing language — "revolutionary" = instant scroll-past
-- Skip the visual design phase — visuals drive everything
-- Fight the shot durations — adapt the script to the visuals
+| Skill | Use for |
+|-------|---------|
+| `/ai-image-generation` | Character reference images via Nano Banana Pro |
+| `/hooks` | Generate hook variations for A/B testing |
+| `/direct-response-copy` | Script optimization for conversion |
+| `/brand-voice` | Ensure scripts match client voice |
 
 ---
 
-## Module Reference Files
+## Reference files
 
-All detailed instructions are in `references/`:
-
-| File | Content | Lines |
-|------|---------|-------|
-| `MODULE_A_CREATIVE_DIRECTOR.md` | Formats, hooks, stealth validation, creative brief | ~250 |
-| `MODULE_B_CINEMATOGRAPHER.md` | Visual design, Kling prompting, beat sheet | ~300 |
-| `MODULE_C_SCREENWRITER.md` | Audio rules, sync, script templates, mapping | ~250 |
-| `MODULE_D_ENGINEER.md` | API reference, JSON assembly, queue management | ~200 |
-| `CHARACTER_LIBRARY.md` | Archetypes, design process | ~100 |
-| `SCENE_SETTINGS.md` | Setting tables and selection rules | ~50 |
+| File | When to read | Content |
+|------|-------------|---------|
+| `MODULE_A_CREATIVE_DIRECTOR.md` | Gate 1 | Formats, hooks, stealth validation, creative brief template |
+| `MODULE_B_CINEMATOGRAPHER.md` | Gate 2 | Visual design, Kling prompting, beat sheet template, Nano Banana prompts |
+| `MODULE_C_SCREENWRITER.md` | Gate 3 | Audio rules, sync, script templates, mapping template |
+| `MODULE_D_ENGINEER.md` | Execution | API reference, JSON assembly, queue management, chunking |
+| `CHARACTER_LIBRARY.md` | Gate 1 | Archetypes, saved characters, design process |
+| `SCENE_SETTINGS.md` | Gate 1 | Setting tables and selection rules |
+| `TESTING-PLAN.md` | When validating | Component, integration, and quality test matrix |
